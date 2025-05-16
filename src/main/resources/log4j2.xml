@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%t] [%p] [%d{yyyy-MM-dd hh:mm:ss.SSS a}] [%c] %m%n" />
+            <MarkerFilter marker="NOT_IMPORTANT_MARKER" onMatch="DENY" onMismatch="ACCEPT" />
+        </Console>
+        <RollingRandomAccessFile name="RollingRandomAccessFile" fileName="C:/testing/logs/restservice.txt" filePattern="C:/testing/logs/$${date:yyyy-MM}/restservice.txt-%d{yyyy-MM-dd}-%i.gz">
+            <PatternLayout pattern="[%t] [%p] [%d{yyyy-MM-dd hh:mm:ss.SSS a}] [%c] %m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+            <MarkerFilter marker="NOT_IMPORTANT_MARKER" onMatch="DENY" onMismatch="ACCEPT" />
+        </RollingRandomAccessFile>
+        <Async name="Async">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingRandomAccessFile" />
+        </Async>
+    </appenders>
+    <loggers>
+        <logger name="com." level="debug" />
+        <logger name="org.hibernate" level="info" />
+        <logger name="org.springframework" level="info" />
+        <logger name="org.springframework.security.web.access.intercept.FilterSecurityInterceptor" level="debug" />
+        <logger name="org.springframework.security.access.vote.AffirmativeBased" level="debug" />
+        <logger name="org.springframework.security.web.access.ExceptionTranslationFilter" level="debug" />
+        <logger name="org.apache" level="info" />
+        <logger name="org.apache.fop" level="error" />
+        <root level="debug">
+            <appender-ref ref="Async" level="debug" />
+        </root>
+    </loggers>
+</configuration>
