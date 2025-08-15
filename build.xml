@@ -1,16 +1,6 @@
 <?xml version="1.0" ?> 
 <project name="sde.ib.web" default="zip">
-	<!--property file="build.properties"/-->
-	<path id="compile.classpath">
-		<fileset dir="WebContent/WEB-INF/lib">
-			<include name="*.jar"/>
-		</fileset>
-		<fileset dir="${web.lib.folder}">
-			<include name="jsp-api.jar"/>
-			<include name="servlet-api.jar"/>
-		</fileset>
-	</path>
-	
+	<!--property file="build.properties"/-->	
 	<target name="init">
 		<mkdir dir="build/classes"/>
 		<mkdir dir="dist" />
@@ -43,3 +33,4 @@
 	
 
 </project>
+
