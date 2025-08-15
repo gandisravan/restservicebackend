@@ -1,40 +1,43 @@
 <?xml version="1.0"?> 
-<project name="restservicebackend" default="zip">
+<project name="sde.ib.web" default="zip" basedir=".">
 
-	<!--property file="build.properties"/-->	
+    <!-- Load external properties if present -->
+    <property file="build.properties" optional="true"/>
+    <!-- Default WAR filename if not set -->
+    <property name="service.war.filename" value="my-service"/>
 
-	<target name="init">
-		<mkdir dir="build/classes"/>
-		<mkdir dir="dist"/>
-	</target>
-	
-	<target name="compile" depends="init">
-		<javac destdir="build/classes" debug="true" srcdir="." includes="src/**,src_override/**"
-			target="1.7">
-			<classpath refid="compile.classpath"/>
-		</javac>
-	</target>
-	
-	<target name="zip" depends="clean,compile">
-		<echo>building the zip files</echo>
-		<zip destfile="dist/${service.war.filename}.zip">
-			<!-- Package WebContent, but exclude XML files and JARs/zips from lib (even though it doesn't exist) -->
-			<zipfileset dir="WebContent" prefix="${service.war.filename}" excludes="**/*.xml"/>
+    <!-- Define classpath for compiling external jars -->
+    <path id="compile.classpath">
+        <fileset dir="lib" includes="**/*.jar"/>
+    </path>
 
-			<!-- Package compiled classes -->
-			<zipfileset dir="build/classes" prefix="${service.war.filename}/WEB-INF/classes"/>
+    <target name="clean">
+        <echo>Cleaning folder...</echo>
+        <delete dir="dist"/>
+        <delete dir="build"/>
+    </target>
 
-			<!-- Additional resources -->
-			<zipfileset dir="resources/parameter" prefix="${service.war.filename}/WEB-INF/classes/parameter"/>
-			<zipfileset dir="resources/report" prefix="${service.war.filename}/WEB-INF/classes/report"/>
-			<zipfileset dir="resources" prefix="${service.war.filename}/WEB-INF/classes" includes="**/environment.properties"/>
-		</zip>
-	</target>
-	
-	<target name="clean">
-		<echo>cleaning folder</echo>
-		<delete dir="dist"/>
-		<delete dir="build"/>
-	</target>
+    <target name="init">
+        <mkdir dir="build/classes"/>
+        <mkdir dir="dist"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac destdir="build/classes" debug="true" srcdir="." includes="src/**,src_override/**"
+               target="1.7" includeantruntime="false">
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+
+    <target name="zip" depends="clean,compile">
+        <echo>Building the zip files...</echo>
+        <zip destfile="dist/${service.war.filename}.zip">
+            <zipfileset dir="WebContent" prefix="${service.war.filename}" excludes="**/*.xml"/>
+            <zipfileset dir="build/classes" prefix="${service.war.filename}/WEB-INF/classes"/>
+            <zipfileset dir="resources/parameter" prefix="${service.war.filename}/WEB-INF/classes/parameter"/>
+            <zipfileset dir="resources/report" prefix="${service.war.filename}/WEB-INF/classes/report"/>
+            <zipfileset dir="resources" prefix="${service.war.filename}/WEB-INF/classes" includes="**/environment.properties"/>
+        </zip>
+    </target>
 
 </project>
