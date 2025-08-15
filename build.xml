@@ -10,7 +10,11 @@
     <!-- Default WAR filename -->
     <property name="service.war.filename" value="my-service"/>
 
-   
+    <!-- Define compile classpath -->
+    <path id="compile.classpath">
+        <fileset dir="lib" includes="**/*.jar"/>
+    </path>
+
     <target name="clean">
         <echo>Cleaning build and dist folders...</echo>
         <delete dir="build"/>
@@ -41,4 +45,3 @@
     </target>
 
 </project>
-
