@@ -10,10 +10,6 @@
     <!-- Default WAR filename -->
     <property name="service.war.filename" value="my-service"/>
 
-    <!-- Define compile classpath -->
-    <path id="compile.classpath">
-        <fileset dir="lib" includes="**/*.jar"/>
-    </path>
 
     <target name="clean">
         <echo>Cleaning build and dist folders...</echo>
@@ -28,8 +24,7 @@
 
     <target name="compile" depends="load-properties,init">
         <javac destdir="build/classes" debug="true" srcdir="." includes="src/**,src_override/**"
-               target="1.7" includeantruntime="false">
-            <classpath refid="compile.classpath"/>
+               target="1.7" includeantruntime="false">         
         </javac>
     </target>
 
@@ -45,3 +40,4 @@
     </target>
 
 </project>
+
