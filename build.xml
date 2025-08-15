@@ -1,4 +1,4 @@
-<project name="sde.ib.web" default="zip" basedir=".">
+<project name="restservicebackend" default="zip" basedir=".">
 
     <!-- Check if build.properties exists -->
     <available file="build.properties" property="build.properties.exists"/>
@@ -22,3 +22,4 @@
     <!-- other targets -->
 
 </project>
+
