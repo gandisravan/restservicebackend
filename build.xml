@@ -1,22 +1,17 @@
 <?xml version="1.0"?>
 <project name="sde.ib.web" default="zip" basedir=".">
 
-    <!-- Check if build.properties exists -->
+    <!-- Load build.properties if it exists -->
     <available file="build.properties" property="build.properties.exists"/>
-
-    <!-- Load properties only if build.properties exists -->
     <target name="load-properties" if="build.properties.exists">
         <property file="build.properties"/>
     </target>
 
-    <!-- Default property for WAR filename -->
+    <!-- Default WAR filename -->
     <property name="service.war.filename" value="my-service"/>
 
-    <!-- Check if lib directory exists -->
-    <available file="lib" type="dir" property="lib.exists"/>
-
-    <!-- Define classpath only if lib exists -->
-    <path id="compile.classpath" if="lib.exists">
+    <!-- Define compile classpath (empty if lib/ missing) -->
+    <path id="compile.classpath">
         <fileset dir="lib" includes="**/*.jar"/>
     </path>
 
@@ -34,9 +29,7 @@
     <target name="compile" depends="load-properties,init">
         <javac destdir="build/classes" debug="true" srcdir="." includes="src/**,src_override/**"
                target="1.7" includeantruntime="false">
-            <classpath>
-                <path refid="compile.classpath"/>
-            </classpath>
+            <classpath refid="compile.classpath"/>
         </javac>
     </target>
 
