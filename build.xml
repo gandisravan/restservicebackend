@@ -1,25 +1,49 @@
-<project name="restservicebackend" default="zip" basedir=".">
+<?xml version="1.0"?>
+<project name="sde.ib.web" default="zip" basedir=".">
 
     <!-- Check if build.properties exists -->
     <available file="build.properties" property="build.properties.exists"/>
 
+    <!-- Load properties only if build.properties exists -->
     <target name="load-properties" if="build.properties.exists">
         <property file="build.properties"/>
     </target>
 
+    <!-- Default property for WAR filename -->
     <property name="service.war.filename" value="my-service"/>
 
-    <!-- ... rest of your targets ... -->
+    <!-- Define classpath for external jars if any -->
+    <path id="compile.classpath">
+        <fileset dir="lib" includes="**/*.jar"/>
+    </path>
+
+    <target name="clean">
+        <echo>Cleaning build and dist folders...</echo>
+        <delete dir="build"/>
+        <delete dir="dist"/>
+    </target>
+
+    <target name="init">
+        <mkdir dir="build/classes"/>
+        <mkdir dir="dist"/>
+    </target>
 
     <target name="compile" depends="load-properties,init">
-        <!-- javac task -->
+        <javac destdir="build/classes" debug="true" srcdir="." includes="src/**,src_override/**"
+               target="1.7" includeantruntime="false">
+            <classpath refid="compile.classpath"/>
+        </javac>
     </target>
 
     <target name="zip" depends="clean,compile">
-        <!-- zip task -->
+        <echo>Building the zip file...</echo>
+        <zip destfile="dist/${service.war.filename}.zip">
+            <zipfileset dir="WebContent" prefix="${service.war.filename}" excludes="**/*.xml"/>
+            <zipfileset dir="build/classes" prefix="${service.war.filename}/WEB-INF/classes"/>
+            <zipfileset dir="resources/parameter" prefix="${service.war.filename}/WEB-INF/classes/parameter"/>
+            <zipfileset dir="resources/report" prefix="${service.war.filename}/WEB-INF/classes/report"/>
+            <zipfileset dir="resources" prefix="${service.war.filename}/WEB-INF/classes" includes="**/environment.properties"/>
+        </zip>
     </target>
 
-    <!-- other targets -->
-
 </project>
-
