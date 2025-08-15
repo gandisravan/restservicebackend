@@ -12,8 +12,11 @@
     <!-- Default property for WAR filename -->
     <property name="service.war.filename" value="my-service"/>
 
-    <!-- Define classpath for external jars if any -->
-    <path id="compile.classpath">
+    <!-- Check if lib directory exists -->
+    <available file="lib" type="dir" property="lib.exists"/>
+
+    <!-- Define classpath only if lib exists -->
+    <path id="compile.classpath" if="lib.exists">
         <fileset dir="lib" includes="**/*.jar"/>
     </path>
 
@@ -31,7 +34,9 @@
     <target name="compile" depends="load-properties,init">
         <javac destdir="build/classes" debug="true" srcdir="." includes="src/**,src_override/**"
                target="1.7" includeantruntime="false">
-            <classpath refid="compile.classpath"/>
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>
         </javac>
     </target>
 
