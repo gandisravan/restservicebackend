@@ -1,0 +1,44 @@
+<?xml version="1.0" ?> 
+<project name="sde.ib.web" default="zip">
+	<!--property file="build.properties"/-->
+	<path id="compile.classpath">
+		<fileset dir="WebContent/WEB-INF/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${web.lib.folder}">
+			<include name="jsp-api.jar"/>
+			<include name="servlet-api.jar"/>
+		</fileset>
+	</path>
+	
+	<target name="init">
+		<mkdir dir="build/classes"/>
+		<mkdir dir="dist" />
+	</target>
+	
+	<target name="compile" depends="init" >
+		<javac destdir="build/classes" debug="true" srcdir="." includes="src/**,src_override/**"
+			target="1.7">
+			<classpath refid="compile.classpath"/>
+		</javac>
+	</target>
+	
+	<target name="zip" depends="clean,compile">
+		<echo>building the zip files</echo>
+		<zip destfile="dist/${service.war.filename}.zip">
+			<zipfileset dir="WebContent" prefix="${service.war.filename}" excludes="**/lib/*.jar,**/lib/*.zip,**/*.xml"/>
+			<zipfileset dir="WebContent" prefix="${service.war.filename}" includes="**/lib/sde.*.jar"/>
+			<zipfileset dir="build/classes" prefix="${service.war.filename}/WEB-INF/classes"/>
+			<zipfileset dir="resources/parameter" prefix="${service.war.filename}/WEB-INF/classes/parameter"/>
+			<zipfileset dir="resources/report" prefix="${service.war.filename}/WEB-INF/classes/report"/>
+			<zipfileset dir="resources" prefix="${service.war.filename}/WEB-INF/classes" includes="**/environment.properties"/>			
+		</zip>
+	</target>
+		
+	<target name="clean">
+		<echo>cleaning folder</echo>
+		<delete dir="dist" />
+		<delete dir="build" />
+	</target>
+	
+</project>
